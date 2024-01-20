@@ -9,14 +9,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.dto.User;
+import com.example.demo.service.Services;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 
 @Controller
 public class Bookcontroller {
 	@Autowired
+	Services services;
+	@Autowired
 	User user;
+	
 @GetMapping("/")
  public String home() {
 	return "Home";
@@ -26,16 +31,27 @@ public class Bookcontroller {
 public String loadSignin() {
 	return "Signin";
 }
+
 @GetMapping("/signup")
-public String loadSignup() 
-{
+public String loadSignup(ModelMap map) {
+	map.put("user", user);
 	return "Signup";
 }
+
 @PostMapping("/signup")
-public String signup(@Valid User user, BindingResult result) {
-	if (result.hasErrors())
+public String signup(@Valid User user, BindingResult result,ModelMap map) {
+	if (result.hasErrors()) {
+		
 		return "Signup";
+	}
 	else
-		return "Signin";
+		
+			return services.signup(user, result);
+		
+}
+@PostMapping("/Login")
+public String Login(@RequestParam String email,@RequestParam String password,HttpSession session)
+{
+	return Services.login(email, password, session);
 }
 }

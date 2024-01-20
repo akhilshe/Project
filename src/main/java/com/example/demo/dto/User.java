@@ -45,4 +45,6 @@ public class User {
 	@NotNull(message = "* this is Required Field")
 	@Past(message = "* Enter Valid Date")
 	private LocalDate dob;
+	private String user;
+	private int otp;
 }
