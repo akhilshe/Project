@@ -49,4 +49,12 @@ public class UserDao {
 	}
 
 
+
+
+	public User findbyid(int id) {
+		
+		return userRepository.findById(id).orElseThrow();
+	}
+
+
 }

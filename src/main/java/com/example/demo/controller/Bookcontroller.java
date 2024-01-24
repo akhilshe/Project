@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -49,9 +50,26 @@ public String signup(@Valid User user, BindingResult result,ModelMap map) {
 			return services.signup(user, result);
 		
 }
-@PostMapping("/Login")
-public String Login(@RequestParam String email,@RequestParam String password,HttpSession session)
+//@PostMapping("/Login")
+//public String Login(@RequestParam String email,@RequestParam String password,HttpSession session)
+//{
+//	return Services.login(email, password, session);
+//}
+//pathvariable
+@PostMapping("/send-otp/{id}")
+public String sendotp(@PathVariable int id,ModelMap map)
 {
-	return Services.login(email, password, session);
+	map.put("id", id);
+	map.put("sucess message","otp sucess sent");
+	return "OtpEnter";
+	
+	
+	
+}
+public String verifyotp(@RequestParam int id,@RequestParam int otp,HttpSession httpSession,ModelMap modelMap)
+{
+	return services.verifyotp(id,otp,modelMap,httpSession);
+	
+	
 }
 }

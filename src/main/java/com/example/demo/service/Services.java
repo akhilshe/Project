@@ -1,11 +1,16 @@
 package com.example.demo.service;
 
+
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 
 import com.example.demo.dao.UserDao;
 import com.example.demo.dto.User;
+import com.example.demo.helper.Mailhelper;
 import com.example.demo.servicefirst.Servicefirst;
 
 import jakarta.servlet.http.HttpSession;
@@ -17,7 +22,8 @@ public  class Services implements Servicefirst{
 
 	@Autowired
 	UserDao userDao;
-	
+	@Autowired
+	Mailhelper mailhelper;
 	@Override
 	public String signup(User user, BindingResult result) {
 		if (userDao.checkEmailDuplicate(user.getEmail()))
@@ -32,10 +38,13 @@ public  class Services implements Servicefirst{
 		else
 		{
 			user.setUser("user");
+			user.setStatus("unverified");
 //			user.setPassword(AES.encrypt(user.getPassword(), "123"));
-
+			user.setOtp(new Random().nextInt(100000, 999999));
+			mailhelper.sendotp(user);
 			userDao.createUser(user);
-			return "redirect:/signin";
+//			
+			return "OtpEnter";
 			
 		}
 	}
@@ -44,6 +53,27 @@ public  class Services implements Servicefirst{
 		
 		return null;
 	}
+
+	public String verifyotp(int id, int otp, ModelMap modelMap, HttpSession httpSession) {
+		// TODO Auto-generated method stub
+		
+		User user = userDao.findbyid(id);
+		int otp_from_database = user.getOtp();
+		if (otp == otp_from_database)
+		{
+			System.out.println("verified");
+			user.setStatus("verified");
+			return "Signup";
+		}
+		else
+		{	System.out.println("not verified");
+			return "OtpEnter";
+		}
+		
+	}
+
+	
+
 
 	
 	
