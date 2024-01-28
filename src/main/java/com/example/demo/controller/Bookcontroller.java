@@ -28,9 +28,9 @@ public class Bookcontroller {
 	return "Home";
 }
 
-@GetMapping("/signin")
-public String loadSignin() {
-	return "Signin";
+@PostMapping("/login")
+public String login(@RequestParam String email,@RequestParam String password,HttpSession session) {
+	return services.login(email,password,session);
 }
 
 @GetMapping("/signup")
@@ -56,20 +56,22 @@ public String signup(@Valid User user, BindingResult result,ModelMap map) {
 //	return Services.login(email, password, session);
 //}
 //pathvariable
-@PostMapping("/send-otp/{id}")
+@GetMapping("/send-otp/{id}")
 public String sendotp(@PathVariable int id,ModelMap map)
 {
 	map.put("id", id);
 	map.put("sucess message","otp sucess sent");
-	return "OtpEnter";
-	
-	
-	
+	return "OtpEnter";	
 }
+
+@GetMapping("/signin")
+public String loadSignin() {
+	return "Signin";
+}
+
+@PostMapping("/verify-otp")
 public String verifyotp(@RequestParam int id,@RequestParam int otp,HttpSession httpSession,ModelMap modelMap)
 {
-	return services.verifyotp(id,otp,modelMap,httpSession);
-	
-	
+	return services.verifyotp(id,otp,modelMap,httpSession);	
 }
 }

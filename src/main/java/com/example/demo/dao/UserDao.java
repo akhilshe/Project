@@ -57,4 +57,12 @@ public class UserDao {
 	}
 
 
+
+
+	public User findbymail(String email) {
+		return userRepository.findByEmail(email);
+		
+	}
+
+
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.dao.UserDao;
 import com.example.demo.dto.User;
@@ -38,35 +39,57 @@ public  class Services implements Servicefirst{
 		else
 		{
 			user.setUser("user");
-			user.setStatus("unverified");
 //			user.setPassword(AES.encrypt(user.getPassword(), "123"));
 			user.setOtp(new Random().nextInt(100000, 999999));
 			mailhelper.sendotp(user);
 			userDao.createUser(user);
 //			
-			return "OtpEnter";
+			return "redirect:/send-otp/" + user.getId();
 			
 		}
 	}
 
 	public  String login(String email, String password, HttpSession session) {
 		
-		return null;
+		 User user = userDao.findbymail(email);
+		 if (user == null)
+		 {
+			 session.setAttribute("failMessage","invalid email");
+			 return "Signin";
+		 }
+		 else 
+		 {
+			 if(user.getPassword().equals(password))
+			 {
+				 session.setAttribute("SuccessMessage","login sucessfull");
+				 return "redirect:/";
+			 }
+			 else 
+			 {
+				 session.setAttribute("failMessage","invalid Password");
+				 return "Signin";
+			 }
+		 }	
+		 
+		 
 	}
 
-	public String verifyotp(int id, int otp, ModelMap modelMap, HttpSession httpSession) {
+	public String verifyotp(int id, int otp, ModelMap modelMap, HttpSession session) {
 		// TODO Auto-generated method stub
 		
 		User user = userDao.findbyid(id);
 		int otp_from_database = user.getOtp();
 		if (otp == otp_from_database)
 		{
-			System.out.println("verified");
-			user.setStatus("verified");
-			return "Signup";
+			
+			user.setVerified(true);
+			session.setAttribute("successMessage", "OTP verified sucessfully");
+			
+			return "redirect:/signin";
 		}
 		else
 		{	System.out.println("not verified");
+			session.setAttribute("failMessage", "OTP verification failed");
 			return "OtpEnter";
 		}
 		

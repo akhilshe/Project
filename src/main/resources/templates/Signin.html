@@ -42,20 +42,36 @@ footer {
 </style>
 </head>
 <body>
+	<div class = "container">
+	<div th:if="${session.successMessage}" class="alert alert-success" role ="alert" id="successAlert"></div>		
+	<span th:text="${session.successMessage}"></span>
+			<th:block th:text="${@sessionmanager.removeSuccessMessage()}"></th:block>
+	
+	<div th:if="${session.failMessage}" class="alert alert-danger" role="alert" id="successAlert">
+		<span th:text="${session.failMessage}"></span>		
+	
+	</div>
+	<div>
+	<div th:if="${session.failMessage}" class="alert alert-danger" role="alert" id="successAlert">
+		<span th:text="${session.failMessage}"></span>		
+	
+	</div>
 	
 	<div class="container">
 		<h2 class="text-center">Login</h2>
+		
 		<form action="/login" method="post">
 			<div class="form-group">
-				<label for="email">Email:</label> <input type="email"
-					class="form-control" id="email" name="email" required>
+				<label for="email">Email:</label> 
+				<input type="email" class="form-control" id="email" name="email" value="email" required></input>
 			</div>
 			<div class="form-group">
-				<label for="password">Password:</label> <input type="password"
-					class="form-control" id="password" name="password" required>
+				<label for="password">Password:</label> 
+				<input type="password" class="form-control" id="password" name="password" value="password" required></input>
 			</div>
 			<button type="submit" class="btn btn-primary btn-block">Login</button>
 		</form>
+		
 		<a href="/" class="btn btn-link btn-block mt-3">Back to Home</a>
 	</div>
 
