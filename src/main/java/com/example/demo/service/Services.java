@@ -61,6 +61,7 @@ public  class Services implements Servicefirst{
 		 {
 			 if(user.getPassword().equals(password))
 			 {
+				 session.setAttribute("user",user);
 				 session.setAttribute("SuccessMessage","login sucessfull");
 				 return "redirect:/";
 			 }
