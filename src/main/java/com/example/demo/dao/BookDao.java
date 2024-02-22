@@ -4,10 +4,11 @@ import java.awt.print.Book;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.example.demo.dto.Books;
 import com.example.demo.repository.BookRepo;
-
+@Repository
 public class BookDao {
 	@Autowired
 	BookRepo bookRepository;
@@ -30,6 +31,8 @@ public class BookDao {
 	public Books findById(int id) {
 		return bookRepository.findById(id).orElseThrow();
 	}
+
+	
 
 //	public BookOrder findOrderById(int id) {
 //		return bookOrderRepository.findById(id).orElseThrow();
